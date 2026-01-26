@@ -4,80 +4,83 @@ document.addEventListener('DOMContentLoaded', function() {
     const themeToggle = document.getElementById('themeToggle');
     const body = document.body;
     
-    // Check for saved theme preference or use light theme as default
-    const savedTheme = localStorage.getItem('portfolio-theme');
-    if (savedTheme === 'dark') {
-        body.classList.add('dark-theme');
-        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-    } else {
-        body.classList.remove('dark-theme');
-        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-    }
-    
-    // Theme toggle functionality
-    themeToggle.addEventListener('click', function() {
-        body.classList.toggle('dark-theme');
-        
-        if (body.classList.contains('dark-theme')) {
+    if (themeToggle) {
+        // Check for saved theme preference or use light theme as default
+        const savedTheme = localStorage.getItem('portfolio-theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-theme');
             themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            localStorage.setItem('portfolio-theme', 'dark');
         } else {
+            body.classList.remove('dark-theme');
             themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-            localStorage.setItem('portfolio-theme', 'light');
         }
-    });
+        
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-theme');
+            
+            if (body.classList.contains('dark-theme')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('portfolio-theme', 'dark');
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('portfolio-theme', 'light');
+            }
+        });
+    }
     
     // ===== MOBILE MENU TOGGLE =====
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.querySelector('.nav-menu');
-    const body = document.body;
     
-    function closeMobileMenu() {
-        navMenu.classList.remove('active');
-        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-        menuToggle.setAttribute('aria-expanded', 'false');
-        body.style.overflow = '';
-    }
-    
-    function openMobileMenu() {
-        navMenu.classList.add('active');
-        menuToggle.innerHTML = '<i class="fas fa-times"></i>';
-        menuToggle.setAttribute('aria-expanded', 'true');
-        body.style.overflow = 'hidden';
-    }
-    
-    menuToggle.addEventListener('click', function(e) {
-        e.stopPropagation();
+    if (menuToggle && navMenu) {
+        function closeMobileMenu() {
+            navMenu.classList.remove('active');
+            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            menuToggle.setAttribute('aria-expanded', 'false');
+            body.style.overflow = '';
+        }
         
-        if (navMenu.classList.contains('active')) {
-            closeMobileMenu();
-        } else {
-            openMobileMenu();
+        function openMobileMenu() {
+            navMenu.classList.add('active');
+            menuToggle.innerHTML = '<i class="fas fa-times"></i>';
+            menuToggle.setAttribute('aria-expanded', 'true');
+            body.style.overflow = 'hidden';
         }
-    });
-    
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(event) {
-        if (navMenu.classList.contains('active') && 
-            !navMenu.contains(event.target) && 
-            !menuToggle.contains(event.target)) {
-            closeMobileMenu();
-        }
-    });
-    
-    // Close mobile menu when clicking on a link
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function() {
-            closeMobileMenu();
+        
+        menuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            if (navMenu.classList.contains('active')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
         });
-    });
-    
-    // Close mobile menu on window resize (if resizing to desktop)
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
-            closeMobileMenu();
-        }
-    });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (navMenu.classList.contains('active') && 
+                !navMenu.contains(event.target) && 
+                !menuToggle.contains(event.target)) {
+                closeMobileMenu();
+            }
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                closeMobileMenu();
+            });
+        });
+        
+        // Close mobile menu on window resize (if resizing to desktop)
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+    }
     
     // ===== SMOOTH SCROLLING =====
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -100,19 +103,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== STICKY NAVIGATION =====
     window.addEventListener('scroll', function() {
         const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 100) {
-            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-            navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-            
-            if (body.classList.contains('dark-theme')) {
-                navbar.style.background = 'rgba(17, 17, 17, 0.98)';
-            }
-        } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-            navbar.style.boxShadow = 'none';
-            
-            if (body.classList.contains('dark-theme')) {
-                navbar.style.background = 'rgba(17, 17, 17, 0.95)';
+        if (navbar) {
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+                
+                if (body.classList.contains('dark-theme')) {
+                    navbar.style.background = 'rgba(17, 17, 17, 0.98)';
+                }
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = 'none';
+                
+                if (body.classList.contains('dark-theme')) {
+                    navbar.style.background = 'rgba(17, 17, 17, 0.95)';
+                }
             }
         }
     });
@@ -253,7 +258,10 @@ document.addEventListener('DOMContentLoaded', animateSkillsOnScroll);
     }
     
     // ===== SET CURRENT YEAR IN FOOTER =====
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    const currentYearElement = document.getElementById('currentYear');
+    if (currentYearElement) {
+        currentYearElement.textContent = new Date().getFullYear();
+    }
     
     // ===== SCROLL ANIMATIONS =====
     const animateOnScroll = function() {
