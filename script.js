@@ -30,36 +30,53 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== MOBILE MENU TOGGLE =====
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.querySelector('.nav-menu');
+    const body = document.body;
     
-    menuToggle.addEventListener('click', function() {
-        navMenu.classList.toggle('active');
+    function closeMobileMenu() {
+        navMenu.classList.remove('active');
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        menuToggle.setAttribute('aria-expanded', 'false');
+        body.style.overflow = '';
+    }
+    
+    function openMobileMenu() {
+        navMenu.classList.add('active');
+        menuToggle.innerHTML = '<i class="fas fa-times"></i>';
+        menuToggle.setAttribute('aria-expanded', 'true');
+        body.style.overflow = 'hidden';
+    }
+    
+    menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
         
-        // Change menu icon
         if (navMenu.classList.contains('active')) {
-            menuToggle.innerHTML = '<i class="fas fa-times"></i>';
-            menuToggle.setAttribute('aria-expanded', 'true');
+            closeMobileMenu();
         } else {
-            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-            menuToggle.setAttribute('aria-expanded', 'false');
+            openMobileMenu();
         }
     });
     
     // Close mobile menu when clicking outside
     document.addEventListener('click', function(event) {
-        if (!navMenu.contains(event.target) && !menuToggle.contains(event.target)) {
-            navMenu.classList.remove('active');
-            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-            menuToggle.setAttribute('aria-expanded', 'false');
+        if (navMenu.classList.contains('active') && 
+            !navMenu.contains(event.target) && 
+            !menuToggle.contains(event.target)) {
+            closeMobileMenu();
         }
     });
     
     // Close mobile menu when clicking on a link
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', function() {
-            navMenu.classList.remove('active');
-            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-            menuToggle.setAttribute('aria-expanded', 'false');
+            closeMobileMenu();
         });
+    });
+    
+    // Close mobile menu on window resize (if resizing to desktop)
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
+            closeMobileMenu();
+        }
     });
     
     // ===== SMOOTH SCROLLING =====
